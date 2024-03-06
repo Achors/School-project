@@ -1,6 +1,6 @@
 from flask_restful import Api, Resource, reqparse
 from flask import jsonify, Blueprint
-from models import db, Student
+from models import db, Student, Teachers
 from schema import StudentSchema
 
 
@@ -19,6 +19,30 @@ class StudentResource(Resource):
         else:
             student = Student.query.get_or_404(student_id)
             return jsonify(student_schema.dump(student))
+        
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument('student_name', type=str, required=True)
+        parser.add_argument('email', type=str, required=True)
+        parser.add_argument('teacher_id', type=int, required=True)
+        args = parser.parse_args()
+
+        teacher = Teachers.query.filter_by(teacher_id=args['teacher_id']).first()
+        if not teacher:
+            
+            teacher = Teachers(teacher_id=args['teacher_id'])
+            db.session.add(teacher)
+            db.session.commit()
+
+        new_student = Student(
+            student_name=args['student_name'],
+            email=args['email'],
+            teacher_id=args['teacher_id']
+        )
+        db.session.add(new_student)
+        db.session.commit()
+
+        return jsonify(student_schema.dump(new_student)), 201
 
     def put(self, student_id):
         student = Student.query.get_or_404(student_id)
@@ -36,6 +60,11 @@ class StudentResource(Resource):
         res = jsonify(student_schema.dump(student))
         return res
     
+    def delete(self, student_id):
+        student = Student.query.get_or_404(student_id)
+        db.session.delete(student)
+        db.session.commit()
+        return '', 204
 
 
 api.add_resource(StudentResource, '/students', '/students/<int:student_id>')
