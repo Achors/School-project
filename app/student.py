@@ -12,9 +12,13 @@ student_bp = Blueprint('student_bp', __name__)
 api = Api(student_bp)
 
 class StudentResource(Resource):
-    def get(self, student_id):
-        student = Student.query.get_or_404(student_id)
-        return jsonify(student_schema.dump(student))
+    def get(self, student_id=None):
+        if student_id is None:
+            students = Student.query.all()
+            return jsonify(students_schema.dump(students))
+        else:
+            student = Student.query.get_or_404(student_id)
+            return jsonify(student_schema.dump(student))
 
     def put(self, student_id):
         student = Student.query.get_or_404(student_id)
@@ -34,5 +38,5 @@ class StudentResource(Resource):
     
 
 
-api.add_resource(StudentResource, '/students/<int:student_id>')
+api.add_resource(StudentResource, '/students', '/students/<int:student_id>')
 
