@@ -1,11 +1,18 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from models import db,Student, Teachers
+from marshmallow import fields
+from models import Student, Class, Fee
+
 
 class StudentSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Student
 
-class TeachersSchema(SQLAlchemyAutoSchema):
+
+class ClassSchema(SQLAlchemyAutoSchema):
     class Meta:
-        model = Teachers
-        sqla_session = db.session
+        model = Class
+
+
+class FeeSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Fee
