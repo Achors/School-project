@@ -1,8 +1,11 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from marshmallow import fields
-from models import Student
-
+from models import db,Student, Teachers
 
 class StudentSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = Student
+
+class TeachersSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Teachers
+        sqla_session = db.session
