@@ -3,6 +3,7 @@ from models import db
 from flask_migrate import Migrate
 from student import student_bp
 from classes import class_bp
+from fee import fee_bp
 
 
 app = Flask(__name__)
@@ -17,6 +18,7 @@ def index():
 
 app.register_blueprint(student_bp)
 app.register_blueprint(class_bp)
+app.register_blueprint(fee_bp)
 
 if __name__ == "__main__":
     app.run()
