@@ -34,9 +34,10 @@ class AddTeacher(Resource):
         schema=TeachersSchema()
         data=request.json
         new_teacher=Teachers(**data)
-        db.sessiom.add(new_teacher)
+        #db.sessiom.add(new_teacher)
         db.session.commit()
-        return  jsonify(schema.dump(new_teacher))  
+        #return  jsonify(schema.dump(new_teacher)) 
+        return("The teacher has been updated successfuly"),200 
 class UpdateTeacher(Resource):
     def put(self,teacher_id):
         teacher_id=int(teacher_id)
@@ -48,7 +49,7 @@ class UpdateTeacher(Resource):
             for key, value in data.items():
                 setattr(teacher,key,value)
             db.session.commit()
-            return jsonify("The teacher has been successfuly"),200
+            return ("The teacher has been updated successfuly"),200
 
 
 class PartlyUpdateTeacher(Resource):
@@ -68,8 +69,8 @@ class DeleteTeacher(Resource):
     def delete(self, teacher_id):
         teacher = Teachers.query.filter_by(teacher_id=int(teacher_id)).first()
         if teacher is None:
-           return jsonify({"message":"The teacher with the id {} does not exist".format(teacher_id)}),404
-        db.session.delete(teacher)
+           return ({"message":"The teacher with the id {} does not exist".format(teacher_id)}),404
+        #db.session.delete(teacher)
         db.session.commit()
-        return jsonify({"message":"The teacher with the id {} has been deleted".format(teacher_id)}),200
+        return ({"message":"The teacher with the id {} has been deleted".format(teacher_id)}),200
             
